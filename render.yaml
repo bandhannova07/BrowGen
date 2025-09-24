@@ -1,0 +1,59 @@
+# Render Blueprint for BrowGen Production Deployment
+services:
+  # PostgreSQL Database
+  - type: pserv
+    name: browgen-database
+    plan: free
+    databaseName: browgen
+    user: browgen_user
+
+  # Backend API Service
+  - type: web
+    name: browgen-backend
+    env: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install && npm run build && npm run migrate && npm run seed
+    startCommand: npm start
+    autoDeploy: true
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: browgen-database
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        fromService:
+          type: web
+          name: browgen-frontend
+          envVarKey: RENDER_EXTERNAL_URL
+
+  # Frontend Web Service (Next.js SSR)
+  - type: web
+    name: browgen-frontend
+    env: node
+    rootDir: frontend
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: browgen-backend
+          envVarKey: RENDER_EXTERNAL_URL
