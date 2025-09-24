@@ -98,6 +98,7 @@ If you need to override any values, set these in Render Dashboard:
 #### Common Build Errors
 - **Module not found `@/lib/api`**: Fixed with updated `tsconfig.json` and `next.config.mjs`
 - **Path mapping issues**: Resolved with proper webpack alias configuration
+- **TypeScript packages missing**: Fixed by moving TypeScript dependencies to `dependencies` (not `devDependencies`)
 
 ### 🔧 Manual Commands (if needed)
 
