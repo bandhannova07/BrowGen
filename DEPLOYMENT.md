@@ -85,6 +85,7 @@ If you need to override any values, set these in Render Dashboard:
 - Check CORS_ORIGIN includes frontend domain
 
 #### Frontend Issues
+- ✅ **Path Resolution Fixed**: TypeScript `@/*` imports now work in production
 - Verify NEXT_PUBLIC_API_URL points to backend
 - Check browser console for API connection errors
 - Ensure backend is running and accessible
@@ -93,6 +94,10 @@ If you need to override any values, set these in Render Dashboard:
 - Migrations run during backend build
 - Check backend logs for database connection errors
 - Verify PostgreSQL service is running
+
+#### Common Build Errors
+- **Module not found `@/lib/api`**: Fixed with updated `tsconfig.json` and `next.config.mjs`
+- **Path mapping issues**: Resolved with proper webpack alias configuration
 
 ### 🔧 Manual Commands (if needed)
 
