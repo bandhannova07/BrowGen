@@ -39,10 +39,11 @@ services:
   # Frontend Web Service (Next.js SSR)
   - type: web
     name: browgen-frontend
+    runtime: node
     env: node
     rootDir: frontend
     plan: free
-    buildCommand: npm install && npm run build
+    buildCommand: npm ci && npm run build
     startCommand: npm start
     autoDeploy: true
     envVars:
