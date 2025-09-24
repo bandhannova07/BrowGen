@@ -36,7 +36,7 @@ services:
           name: browgen-frontend
           envVarKey: RENDER_EXTERNAL_URL
 
-  # Frontend Web Service (Next.js SSR)
+  # Frontend Web Service (Next.js SSR) - EXPLICIT WEB SERVICE
   - type: web
     name: browgen-frontend
     runtime: node
@@ -44,8 +44,9 @@ services:
     rootDir: frontend
     plan: free
     buildCommand: npm ci && npm run build
-    startCommand: npm start
+    startCommand: node server.js
     autoDeploy: true
+    healthCheckPath: /
     envVars:
       - key: NODE_VERSION
         value: 20

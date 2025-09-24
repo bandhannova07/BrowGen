@@ -1,0 +1,11 @@
+# Render ignore file
+.git
+.gitignore
+README.md
+*.md
+.env*
+.DS_Store
+node_modules
+.next
+dist
+build
