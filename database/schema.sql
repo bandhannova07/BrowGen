@@ -9,7 +9,40 @@ CREATE TABLE IF NOT EXISTS users (
   email TEXT UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
   name TEXT NOT NULL,
+  role TEXT DEFAULT 'user' CHECK (role IN ('user', 'admin', 'mentor')),
+  last_login TIMESTAMPTZ,
+  email_verified BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Password reset tokens table
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  token TEXT NOT NULL,
+  expires_at TIMESTAMPTZ NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- User points and gamification
+CREATE TABLE IF NOT EXISTS user_points (
+  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  total_points INTEGER DEFAULT 0,
+  current_streak INTEGER DEFAULT 0,
+  longest_streak INTEGER DEFAULT 0,
+  last_activity_date DATE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- User badges
+CREATE TABLE IF NOT EXISTS user_badges (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  badge_type TEXT NOT NULL,
+  badge_name TEXT NOT NULL,
+  earned_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(user_id, badge_type)
 );
 
 CREATE TABLE IF NOT EXISTS categories (

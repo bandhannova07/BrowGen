@@ -1,9 +1,40 @@
 import express from 'express';
 import { pool } from '../lib/pool.js';
+import { cache } from '../lib/redis.js';
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+// Cache middleware
+function cacheMiddleware(ttlSeconds = 300) {
+  return async (req, res, next) => {
+    const cacheKey = `courses:${req.originalUrl}`;
+    
+    try {
+      const cachedData = await cache.get(cacheKey);
+      if (cachedData) {
+        res.set('X-Cache', 'HIT');
+        return res.json(cachedData);
+      }
+      
+      // Store original json method
+      const originalJson = res.json;
+      
+      // Override json method to cache response
+      res.json = function(data) {
+        res.set('X-Cache', 'MISS');
+        cache.set(cacheKey, data, ttlSeconds);
+        return originalJson.call(this, data);
+      };
+      
+      next();
+    } catch (error) {
+      console.error('[CACHE MIDDLEWARE ERROR]', error);
+      next();
+    }
+  };
+}
+
+router.get('/', cacheMiddleware(300), async (req, res) => {
   const { q, category, level } = req.query;
   const conditions = [];
   const values = [];

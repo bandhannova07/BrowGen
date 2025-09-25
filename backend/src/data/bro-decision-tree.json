@@ -1,0 +1,131 @@
+{
+  "version": "1.0",
+  "nodes": {
+    "welcome": {
+      "id": "welcome",
+      "message": {
+        "en": "Hey there! 👋 I'm Bro, your learning companion. How can I help you today?",
+        "bn": "হ্যালো! 👋 আমি ব্রো, তোমার শেখার সাথী। আজ তোমাকে কীভাবে help করতে পারি?",
+        "hi": "नमस्ते! 👋 मैं ब्रो हूं, आपका learning companion। आज मैं आपकी कैसे help कर सकता हूं?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Find Courses",
+            "bn": "Courses খুঁজুন",
+            "hi": "Courses खोजें"
+          },
+          "action": "navigate",
+          "target": "/learning",
+          "nextNode": "course_help"
+        },
+        {
+          "text": {
+            "en": "Meet Mentors",
+            "bn": "Mentors এর সাথে দেখা",
+            "hi": "Mentors से मिलें"
+          },
+          "action": "navigate",
+          "target": "/mentorship",
+          "nextNode": "mentor_help"
+        },
+        {
+          "text": {
+            "en": "Check Progress",
+            "bn": "Progress দেখুন",
+            "hi": "Progress देखें"
+          },
+          "action": "navigate",
+          "target": "/dashboard",
+          "nextNode": "progress_help"
+        }
+      ],
+      "triggers": ["page_load", "help_request"]
+    },
+    "course_complete": {
+      "id": "course_complete",
+      "message": {
+        "en": "Awesome! 🎉 You completed a module. What's next?",
+        "bn": "দারুণ! 🎉 তুমি একটি module complete করেছো। এবার কী?",
+        "hi": "बहुत बढ़िया! 🎉 आपने एक module complete किया। अब क्या?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Next Module",
+            "bn": "পরবর্তী Module",
+            "hi": "अगला Module"
+          },
+          "action": "continue_course",
+          "nextNode": "encouragement"
+        },
+        {
+          "text": {
+            "en": "Take Quiz",
+            "bn": "Quiz দিন",
+            "hi": "Quiz लें"
+          },
+          "action": "start_quiz",
+          "nextNode": "quiz_help"
+        },
+        {
+          "text": {
+            "en": "View Progress",
+            "bn": "Progress দেখুন",
+            "hi": "Progress देखें"
+          },
+          "action": "navigate",
+          "target": "/dashboard",
+          "nextNode": "progress_help"
+        }
+      ],
+      "triggers": ["module_complete", "course_progress"]
+    },
+    "encouragement": {
+      "id": "encouragement",
+      "message": {
+        "en": "Keep going! 💪 You're doing great. Remember, consistency is key!",
+        "bn": "চালিয়ে যাও! 💪 তুমি দারুণ করছো। মনে রেখো, consistency হলো key!",
+        "hi": "चलते रहिए! 💪 आप बहुत अच्छा कर रहे हैं। याद रखें, consistency ही key है!"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Thanks Bro!",
+            "bn": "ধন্যবাদ Bro!",
+            "hi": "Thanks Bro!"
+          },
+          "action": "close",
+          "nextNode": null
+        }
+      ],
+      "triggers": []
+    },
+    "streak_milestone": {
+      "id": "streak_milestone",
+      "message": {
+        "en": "🔥 Amazing! You're on a {streak_count} day streak! Keep the momentum going!",
+        "bn": "🔥 অসাধারণ! তুমি {streak_count} দিনের streak এ আছো! momentum বজায় রাখো!",
+        "hi": "🔥 शानदार! आप {streak_count} दिन के streak पर हैं! momentum बनाए रखें!"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Let's continue!",
+            "bn": "চলো continue করি!",
+            "hi": "चलिए continue करते हैं!"
+          },
+          "action": "navigate",
+          "target": "/learning",
+          "nextNode": null
+        }
+      ],
+      "triggers": ["streak_milestone"]
+    }
+  },
+  "settings": {
+    "cooldown_minutes": 30,
+    "max_daily_interactions": 10,
+    "animation_duration": 300
+  }
+}
