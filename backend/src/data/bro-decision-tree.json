@@ -1,46 +1,179 @@
 {
   "version": "1.0",
   "nodes": {
-    "welcome": {
-      "id": "welcome",
+    "home-welcome": {
       "message": {
-        "en": "Hey there! 👋 I'm Bro, your learning companion. How can I help you today?",
-        "bn": "হ্যালো! 👋 আমি ব্রো, তোমার শেখার সাথী। আজ তোমাকে কীভাবে help করতে পারি?",
-        "hi": "नमस्ते! 👋 मैं ब्रो हूं, आपका learning companion। आज मैं आपकी कैसे help कर सकता हूं?"
+        "en": "Welcome back! 🎉 Ready to continue your learning journey?",
+        "bn": "আবার স্বাগতম! 🎉 তোমার learning journey চালিয়ে যেতে ready?",
+        "hi": "वापस स्वागत है! 🎉 अपनी learning journey जारी रखने के लिए ready?"
       },
       "options": [
         {
           "text": {
-            "en": "Find Courses",
-            "bn": "Courses খুঁজুন",
-            "hi": "Courses खोजें"
+            "en": "Start Learning",
+            "bn": "Learning শুরু করো",
+            "hi": "Learning शुरू करें"
           },
           "action": "navigate",
-          "target": "/learning",
-          "nextNode": "course_help"
+          "target": "/learning"
         },
         {
           "text": {
-            "en": "Meet Mentors",
-            "bn": "Mentors এর সাথে দেখা",
-            "hi": "Mentors से मिलें"
+            "en": "Check My Progress",
+            "bn": "আমার Progress দেখো",
+            "hi": "मेरा Progress देखें"
           },
           "action": "navigate",
-          "target": "/mentorship",
-          "nextNode": "mentor_help"
+          "target": "/dashboard"
         },
         {
           "text": {
-            "en": "Check Progress",
-            "bn": "Progress দেখুন",
-            "hi": "Progress देखें"
+            "en": "Thanks Bro!",
+            "bn": "ধন্যবাদ Bro!",
+            "hi": "Thanks Bro!"
           },
-          "action": "navigate",
-          "target": "/dashboard",
-          "nextNode": "progress_help"
+          "action": "close"
         }
-      ],
-      "triggers": ["page_load", "help_request"]
+      ]
+    },
+    "on-chapter-complete": {
+      "message": {
+        "en": "Awesome work! 🚀 You just completed a chapter. What's next?",
+        "bn": "দারুণ কাজ! 🚀 তুমি একটা chapter complete করেছো। এবার কী?",
+        "hi": "शानदार काम! 🚀 आपने एक chapter complete किया। अब क्या?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Continue Next Chapter",
+            "bn": "পরের Chapter চালিয়ে যাও",
+            "hi": "अगला Chapter जारी रखें"
+          },
+          "action": "continue_course"
+        },
+        {
+          "text": {
+            "en": "Practice More",
+            "bn": "আরো Practice করো",
+            "hi": "और Practice करें"
+          },
+          "action": "navigate",
+          "target": "/practice"
+        },
+        {
+          "text": {
+            "en": "Take a Break",
+            "bn": "একটু Break নাও",
+            "hi": "थोड़ा Break लें"
+          },
+          "action": "close"
+        }
+      ]
+    },
+    "daily-streak-reminder": {
+      "message": {
+        "en": "Great to see you again! 🔥 Keep that learning streak alive!",
+        "bn": "তোমাকে আবার দেখে ভালো লাগলো! 🔥 তোমার learning streak টা alive রাখো!",
+        "hi": "आपको फिर देखकर अच्छा लगा! 🔥 अपना learning streak जिंदा रखें!"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Continue Learning",
+            "bn": "Learning চালিয়ে যাও",
+            "hi": "Learning जारी रखें"
+          },
+          "action": "navigate",
+          "target": "/learning"
+        },
+        {
+          "text": {
+            "en": "Check My Streak",
+            "bn": "আমার Streak দেখো",
+            "hi": "मेरा Streak देखें"
+          },
+          "action": "navigate",
+          "target": "/dashboard?tab=gamification"
+        },
+        {
+          "text": {
+            "en": "Maybe Later",
+            "bn": "পরে হবে",
+            "hi": "बाद में"
+          },
+          "action": "close"
+        }
+      ]
+    },
+    "community-invite": {
+      "message": {
+        "en": "Join our amazing community! 🤝 Connect with fellow learners.",
+        "bn": "আমাদের amazing community তে join করো! 🤝 অন্য learners দের সাথে connect হও।",
+        "hi": "हमारी amazing community में join करें! 🤝 अन्य learners से connect करें।"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Join Community",
+            "bn": "Community তে Join করো",
+            "hi": "Community में Join करें"
+          },
+          "action": "navigate",
+          "target": "/community"
+        },
+        {
+          "text": {
+            "en": "Find Study Buddies",
+            "bn": "Study Buddies খুঁজো",
+            "hi": "Study Buddies खोजें"
+          },
+          "action": "navigate",
+          "target": "/community?tab=buddies"
+        },
+        {
+          "text": {
+            "en": "Not Now",
+            "bn": "এখন না",
+            "hi": "अभी नहीं"
+          },
+          "action": "close"
+        }
+      ]
+    },
+    "mentorship-prompt": {
+      "message": {
+        "en": "Feeling stuck? 🤔 Our mentors are here to help you succeed!",
+        "bn": "কোথাও stuck হয়ে গেছো? 🤔 আমাদের mentors তোমাকে succeed করতে help করবে!",
+        "hi": "कहीं stuck हो गए? 🤔 हमारे mentors आपको succeed करने में help करेंगे!"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Book a Mentor Session",
+            "bn": "Mentor Session book করো",
+            "hi": "Mentor Session book करें"
+          },
+          "action": "navigate",
+          "target": "/mentorship"
+        },
+        {
+          "text": {
+            "en": "Browse Mentors",
+            "bn": "Mentors browse করো",
+            "hi": "Mentors browse करें"
+          },
+          "action": "navigate",
+          "target": "/mentorship?tab=browse"
+        },
+        {
+          "text": {
+            "en": "I'll Figure It Out",
+            "bn": "আমি নিজেই করে নেব",
+            "hi": "मैं खुद कर लूंगा"
+          },
+          "action": "close"
+        }
+      ]
     },
     "course_complete": {
       "id": "course_complete",

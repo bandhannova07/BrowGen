@@ -134,20 +134,84 @@ router.post('/login', loginLimiter, async (req, res) => {
     // Update last login
     await pool.query('UPDATE users SET last_login = NOW() WHERE id = $1', [user.id]);
     
-    const token = jwt.sign(
-      { id: user.id, email: user.email, name: user.name }, 
-      process.env.JWT_SECRET, 
+    // Generate JWT tokens - refresh (7d) and access (15min)
+    const refreshToken = jwt.sign(
+      { id: user.id, email: user.email, name: user.name, type: 'refresh' },
+      process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
     
+    const accessToken = jwt.sign(
+      { id: user.id, email: user.email, name: user.name, type: 'access' },
+      process.env.JWT_SECRET,
+      { expiresIn: '15m' }
+    );
+
+    // Set httpOnly cookie for refresh token
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    analytics.track(user.id, EVENTS.USER_LOGGED_IN, {
+      method: 'email',
+      user_agent: req.get('User-Agent'),
+      ip: req.ip
+    });
+
     logAuthEvent('login_success', email, ip, userAgent, true);
-    res.json({ token, user: { id: user.id, email: user.email, name: user.name } });
+    res.json({
+      accessToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name
+      }
+    });
     
   } catch (e) {
     logAuthEvent('login_error', email, ip, userAgent, false, e);
     console.error('[AUTH ERROR]', e);
     res.status(500).json({ error: 'Login failed' });
   }
+});
+
+// Refresh access token using httpOnly cookie
+router.post('/refresh', async (req, res) => {
+  try {
+    const { refreshToken } = req.cookies;
+    
+    if (!refreshToken) {
+      return res.status(401).json({ error: 'No refresh token provided' });
+    }
+    
+    const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+    
+    if (decoded.type !== 'refresh') {
+      return res.status(401).json({ error: 'Invalid token type' });
+    }
+    
+    // Generate new access token
+    const accessToken = jwt.sign(
+      { id: decoded.id, email: decoded.email, name: decoded.name, type: 'access' },
+      process.env.JWT_SECRET,
+      { expiresIn: '15m' }
+    );
+    
+    res.json({ accessToken });
+    
+  } catch (error) {
+    console.error('[REFRESH ERROR]', error);
+    res.status(401).json({ error: 'Invalid refresh token' });
+  }
+});
+
+// Logout - clear refresh cookie
+router.post('/logout', (req, res) => {
+  res.clearCookie('refreshToken');
+  res.json({ message: 'Logged out successfully' });
 });
 
 router.get('/me', requireAuth, async (req, res) => {

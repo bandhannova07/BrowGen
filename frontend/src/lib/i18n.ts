@@ -78,7 +78,11 @@ const resources = {
         rank: 'Rank',
         totalPoints: 'Total Points',
         currentStreak: 'Current Streak',
-        longestStreak: 'Longest Streak'
+        longestStreak: 'Longest Streak',
+        badgeEarned: 'Badge Earned!',
+        pointsEarned: 'Points Earned',
+        streakBonus: 'Streak Bonus',
+        challengeComplete: 'Challenge Complete!'
       },
       // Bro chatbot
       bro: {
@@ -168,7 +172,11 @@ const resources = {
         rank: 'Rank',
         totalPoints: 'মোট Points',
         currentStreak: 'বর্তমান Streak',
-        longestStreak: 'সর্বোচ্চ Streak'
+        longestStreak: 'সর্বোচ্চ Streak',
+        badgeEarned: 'Badge পেয়েছো! 🎉',
+        pointsEarned: 'Points পেয়েছো',
+        streakBonus: 'Streak Bonus',
+        challengeComplete: 'Challenge সম্পন্ন!'
       },
       // Bro chatbot
       bro: {

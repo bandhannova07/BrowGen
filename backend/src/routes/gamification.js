@@ -5,24 +5,26 @@ import { requireAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Badge definitions
+// Badge definitions - Updated per user requirements
 const BADGES = {
-  first_course: { name: 'First Steps', description: 'Completed your first course', points: 50 },
-  streak_7: { name: 'Week Warrior', description: '7-day learning streak', points: 100 },
+  first_steps: { name: 'First Steps', description: 'Completed first course', points: 100 },
+  streak_3: { name: 'Streak Starter', description: '3-day learning streak', points: 50 },
+  streak_7: { name: 'Week Warrior', description: '7-day learning streak', points: 150 },
   streak_30: { name: 'Month Master', description: '30-day learning streak', points: 500 },
-  points_1000: { name: 'Knowledge Seeker', description: 'Earned 1000 points', points: 100 },
-  points_5000: { name: 'Learning Legend', description: 'Earned 5000 points', points: 250 },
-  mentor_meeting: { name: 'Mentorship Seeker', description: 'Had first mentor session', points: 75 },
-  community_active: { name: 'Community Champion', description: 'Active in community discussions', points: 150 }
+  challenge_10: { name: 'Challenge Champ', description: 'Completed 10 challenges', points: 200 },
+  points_500: { name: 'Skill Builder', description: 'Earned 500 points', points: 75 },
+  points_1000: { name: 'Knowledge Seeker', description: 'Earned 1000 points', points: 150 },
+  points_2000: { name: 'Pro Coder', description: 'Earned 2000 points', points: 300 }
 };
 
 // Points system
 const POINTS = {
-  module_complete: 10,
-  course_complete: 50,
-  quiz_perfect: 25,
-  daily_login: 5,
-  mentor_session: 30,
+  MODULE_COMPLETE: 50,
+  COURSE_COMPLETE: 200,
+  DAILY_LOGIN: 10,
+  FIRST_LOGIN: 50,
+  STREAK_MILESTONE: 100,
+  CHALLENGE_COMPLETE: 75,
   community_post: 15,
   community_comment: 5
 };

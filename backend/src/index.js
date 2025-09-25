@@ -2,6 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import { pool } from './lib/pool.js';
 import authRoutes from './routes/auth.js';
@@ -42,8 +44,8 @@ app.use(cors({
   credentials: true 
 }));
 app.use(express.json());
-
-// Analytics middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(analyticsMiddleware);
 
 app.get('/api/health', async (req, res) => {
