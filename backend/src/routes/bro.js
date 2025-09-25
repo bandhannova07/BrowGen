@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import { cache } from '../lib/redis.js';
-import { requireAuth } from '../middleware/auth.js';
+import { requireAuth, optionalAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -16,13 +16,50 @@ try {
   decisionTree = JSON.parse(readFileSync(treePath, 'utf8'));
 } catch (error) {
   console.error('[BRO] Failed to load decision tree:', error);
-  decisionTree = { nodes: {}, settings: {} };
+  // Create a simple fallback decision tree
+  decisionTree = {
+    nodes: {
+      welcome: {
+        id: 'welcome',
+        triggers: ['home-welcome', 'default'],
+        message: {
+          en: 'Hey there! 👋 I\'m Bro, your coding companion. Ready to level up your skills?',
+          bn: 'হেই! 👋 আমি ব্রো, তোমার কোডিং সঙ্গী। তোমার দক্ষতা বাড়ানোর জন্য প্রস্তুত?',
+          hi: 'हे वहाँ! 👋 मैं ब्रो हूँ, आपका कोडिंग साथी। अपने कौशल को बढ़ाने के लिए तैयार हैं?'
+        },
+        options: [
+          {
+            text: { en: 'Start Learning', bn: 'শেখা শুরু করো', hi: 'सीखना शुरू करें' },
+            action: 'navigate',
+            target: '/learning'
+          },
+          {
+            text: { en: 'View Progress', bn: 'অগ্রগতি দেখো', hi: 'प्रगति देखें' },
+            action: 'navigate',
+            target: '/dashboard'
+          },
+          {
+            text: { en: 'Maybe Later', bn: 'পরে হবে', hi: 'बाद में' },
+            action: 'close'
+          }
+        ]
+      }
+    },
+    settings: {
+      cooldown_minutes: 30,
+      max_daily_interactions: 10,
+      animation_duration: 300
+    }
+  };
 }
 
 // Get Bro response based on trigger and context
-router.post('/trigger', requireAuth, async (req, res) => {
+router.post('/trigger', optionalAuth, async (req, res) => {
   const { trigger, context = {}, language = 'en' } = req.body;
-  const userId = req.user.id;
+  
+  // Check if user is authenticated
+  const isAuthenticated = req.user && req.user.id;
+  const userId = isAuthenticated ? req.user.id : 'anonymous';
   
   try {
     // Check cooldown
@@ -113,9 +150,9 @@ router.post('/trigger', requireAuth, async (req, res) => {
 });
 
 // Handle Bro action (when user clicks an option)
-router.post('/action', requireAuth, async (req, res) => {
+router.post('/action', optionalAuth, async (req, res) => {
   const { action, target, nextNode, context = {} } = req.body;
-  const userId = req.user.id;
+  const userId = req.user ? req.user.id : 'anonymous';
   
   try {
     // Log action for analytics

@@ -8,21 +8,40 @@ async function initRedis() {
   if (redisClient) return redisClient;
   
   try {
-    // Use Upstash Redis URL or fallback
-    const redisUrl = process.env.UPSTASH_REDIS_URL || process.env.REDIS_URL || 'redis://localhost:6379';
+    // Check if we have Upstash credentials
+    const upstashUrl = process.env.UPSTASH_REDIS_REST_URL;
+    const upstashToken = process.env.UPSTASH_REDIS_REST_TOKEN;
     
-    redisClient = createClient({
-      url: redisUrl,
-      socket: {
-        connectTimeout: 10000,
-        commandTimeout: 5000,
-        tls: redisUrl.includes('upstash.io')
-      }
-    });
+    if (upstashUrl && upstashToken) {
+      // Use Upstash REST API format
+      const redisUrl = upstashUrl.replace('https://', 'redis://');
+      
+      redisClient = createClient({
+        url: redisUrl,
+        password: upstashToken,
+        socket: {
+          connectTimeout: 10000,
+          commandTimeout: 5000,
+          tls: true
+        }
+      });
+    } else {
+      // Fallback to regular Redis URL
+      const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
+      
+      redisClient = createClient({
+        url: redisUrl,
+        socket: {
+          connectTimeout: 10000,
+          commandTimeout: 5000,
+          tls: redisUrl.includes('rediss://')
+        }
+      });
+    }
     
     redisClient.on('connect', () => {
       isConnected = true;
-      console.log('✅ Upstash Redis connected');
+      console.log('✅ Redis connected successfully');
     });
     
     redisClient.on('error', (err) => {
@@ -35,6 +54,7 @@ async function initRedis() {
     
   } catch (error) {
     console.warn('⚠️ Redis initialization failed:', error.message);
+    console.log('📝 Continuing without Redis cache...');
     return null;
   }
 }

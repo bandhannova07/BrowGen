@@ -48,6 +48,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(analyticsMiddleware);
 
+// Root route for health checks
+app.get('/', (req, res) => {
+  res.json({ 
+    ok: true, 
+    service: 'browgen-backend',
+    version: '1.0.0',
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.get('/api/health', async (req, res) => {
   try {
     await pool.query('SELECT 1');
