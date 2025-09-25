@@ -134,7 +134,7 @@ export function BroChat() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => triggerBro('help_request')}
-        className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-shadow"
+        className="fixed bottom-6 right-6 z-50 bg-primary-500 hover:bg-primary-600 text-white p-4 rounded-full shadow-glow hover:shadow-glow-accent transition-all duration-200"
         aria-label="Chat with Bro"
       >
         <MessageCircle size={24} />
@@ -153,10 +153,10 @@ export function BroChat() {
           height: isMinimized ? 60 : 'auto'
         }}
         exit={{ opacity: 0, y: 100, scale: 0.8 }}
-        className="fixed bottom-6 right-6 z-50 bg-white rounded-2xl shadow-2xl border border-gray-200 max-w-sm w-80 overflow-hidden"
+        className="fixed bottom-6 right-6 z-50 bg-white rounded-2xl shadow-2xl border border-neutral-200 max-w-sm w-80 overflow-hidden"
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-primary-500 to-accent-500 text-white p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-bold">
               B
